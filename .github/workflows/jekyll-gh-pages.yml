@@ -1,21 +1,23 @@
-name: Deploy SvelteKit to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Specify the Node.js version if needed
+          node-version: '18'
 
       - name: Install dependencies
         run: npm install
@@ -23,9 +25,18 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: Create gh-pages branch if not exists
+        run: |
+          git fetch origin gh-pages || git checkout --orphan gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add .nojekyll
+        run: touch build/.nojekyll
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          deploy_branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build  # Adjust this path to where your built files are located
+          publish_branch: gh-pages
+          publish_dir: build
