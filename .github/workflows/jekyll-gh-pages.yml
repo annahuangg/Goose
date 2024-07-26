@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy Vite Project to GitHub Pages
 
 on:
   push:
@@ -9,42 +9,24 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Set Up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20' # Use the version of Node.js you need
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm install
 
-      - name: Build project
-        run: npm run build
-
-      - name: List build directory contents
-        run: ls -la build
-
-      - name: Ensure gh-pages branch exists
-        run: |
-          git fetch origin gh-pages || git checkout --orphan gh-pages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create .nojekyll file
-        run: |
-          if [ -d "build" ]; then
-            touch build/.nojekyll
-          else
-            echo "Build directory does not exist. Skipping .nojekyll creation."
-          fi
+      - name: Build Project
+        run: npm run build # Ensure this command builds your Vite project
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: build
+          deploy_key: ${{ secrets.DEPLOY_KEY }} # Use deploy_key or personal_token
+          publish_dir: ./dist # Vite builds to the dist directory by default
+          # other options if needed
