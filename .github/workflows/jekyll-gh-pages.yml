@@ -7,9 +7,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  report-build-status:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -24,10 +23,25 @@ jobs:
       
       - name: Build
         run: npm run build
-      
-      - name: Deploy
+
+      - name: Report Build Status
+        if: ${{ success() }}
+        run: echo "Build was successful"
+
+      - name: Report Build Failure
+        if: ${{ failure() }}
+        run: echo "Build failed"
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: report-build-status  # This ensures that deploy runs after report-build-status
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           publish_branch: gh-pages
-          publish_dir: ./dist  # Updated to Vite default output directory
+          publish_dir: ./dist  # Make sure this matches the build output directory
           github_token: ${{ secrets.GITHUB_TOKEN }}
