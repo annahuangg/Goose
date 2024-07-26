@@ -25,14 +25,19 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Create gh-pages branch if not exists
+      - name: Ensure gh-pages branch exists
         run: |
           git fetch origin gh-pages || git checkout --orphan gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Add .nojekyll
-        run: touch build/.nojekyll
+      - name: Create .nojekyll file
+        run: |
+          if [ -d "build" ]; then
+            touch build/.nojekyll
+          else
+            echo "Build directory does not exist. Skipping .nojekyll creation."
+          fi
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
