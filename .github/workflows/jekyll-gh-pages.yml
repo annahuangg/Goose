@@ -1,4 +1,4 @@
-name: Deploy Vite Project to GitHub Pages
+name: Build and Deploy
 
 on:
   push:
@@ -10,23 +10,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Set Up Node.js
+      
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20' # Use the version of Node.js you need
-
-      - name: Install Dependencies
+          node-version: '18' # Specify the Node.js version you need
+      
+      - name: Check Node.js Version
+        run: node -v
+      
+      - name: Install dependencies
         run: npm install
 
-      - name: Build Project
-        run: npm run build # Ensure this command builds your Vite project
-
-      - name: Deploy to GitHub Pages
+      - name: Build
+        run: npm run build # Ensure this matches your build command
+      
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
-          deploy_key: ${{ secrets.DEPLOY_KEY }} # Use deploy_key or personal_token
-          publish_dir: ./dist # Vite builds to the dist directory by default
-          # other options if needed
+          publish_branch: gh-pages
+          publish_dir: ./build
+          github_token: ${{ secrets.GITHUB_TOKEN }}
