@@ -25,6 +25,9 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: List build directory contents
+        run: ls -la build
+
       - name: Ensure gh-pages branch exists
         run: |
           git fetch origin gh-pages || git checkout --orphan gh-pages
