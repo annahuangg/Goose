@@ -1,9 +1,8 @@
 name: Deploy to GitHub Pages
-
 on:
   push:
-    branches: 
-      - 'main'
+    branches:
+      - main
 
 jobs:
   build_site:
@@ -11,12 +10,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      # If you're using pnpm, add this step then change the commands and cache key below to use `pnpm`
-      # - name: Install pnpm
-      #   uses: pnpm/action-setup@v3
-      #   with:
-      #     version: 8
 
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -35,7 +28,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'dist/'  # Update this to the correct build directory
+          path: 'build/'
 
   deploy:
     needs: build_site
