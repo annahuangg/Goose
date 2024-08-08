@@ -43,41 +43,7 @@
 #         id: deployment
 #         uses: actions/deploy-pages@v4
 
-# name: Build and Deploy
-
-# on:
-#   push:
-#     branches:
-#       - main
-#   workflow_dispatch:
-
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
-      
-#       - name: Set up Node.js
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: '18'
-      
-#       - name: Install dependencies
-#         run: npm install
-      
-#       - name: Build
-#         run: npm run build
-      
-#       - name: Deploy
-#         uses: peaceiris/actions-gh-pages@v3
-#         with:
-#           publish_branch: gh-pages
-#           publish_dir: ./dist  # Updated to Vite default output directory
-#           github_token: ${{ secrets.GITHUB_TOKEN }}
-
-name: Build and Deploy to GitHub Pages
+name: Build and Deploy
 
 on:
   push:
@@ -100,17 +66,14 @@ jobs:
       
       - name: Install dependencies
         run: npm install
-
-      - name: Set environment variable
-        run: echo "BASE_PATH=/Goose" >> $GITHUB_ENV
-
+      
       - name: Build
         run: npm run build
-
+      
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           publish_branch: gh-pages
-          publish_dir: ./build  # Update this if your output directory is different
+          publish_dir: ./dist  # Updated to Vite default output directory
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
