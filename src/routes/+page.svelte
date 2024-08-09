@@ -1,5 +1,5 @@
 <script>
-	import ImageButtons from '../../src/components/ImageButtons.svelte';
+	import ImageButtons from '../components/ImageButtons.svelte';
   </script>
   
   <main>
